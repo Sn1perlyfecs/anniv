@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 2nd Anniversary</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Fonts for a romantic feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration for Custom Colors and Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        romantic: {
+                            light: '#ffe5ec',
+                            pink: '#ffb3c6',
+                            rose: '#ff8fab',
+                            dark: '#fb6f92',
+                        }
+                    },
+                    fontFamily: {
+                        script: ['"Dancing Script"', 'cursive'],
+                        sans: ['"Quicksand"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Floating Hearts Animation */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            opacity: 0.5;
+            animation: floatUp linear infinite;
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 5px rgba(251, 111, 146, 0.4));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Polaroid Photo Style */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+        
+        .polaroid:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg);
+            z-index: 10;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ffe5ec; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb3c6; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fb6f92; 
+        }
+    </style>
+</head>
+<body class="bg-romantic-light font-sans text-gray-800 antialiased selection:bg-romantic-pink selection:text-white min-h-screen">
+
+    <!-- PASSCODE SCREEN -->
+    <div id="passcode-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-romantic-light bg-opacity-95 backdrop-blur-sm transition-opacity duration-700">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-11/12 text-center transform transition-all">
+            <div class="w-20 h-20 mx-auto bg-romantic-pink rounded-full flex items-center justify-center mb-6 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-script text-romantic-dark mb-2">Our Secret Place</h2>
+            <p class="text-sm text-gray-500 mb-6">Enter the passcode to unlock our memories.</p>
+            
+            <div class="space-y-4">
+                <input type="password" id="passcode-input" maxlength="10" placeholder="Enter Passcode" 
+                    class="w-full px-4 py-3 text-center text-xl tracking-widest border-2 border-romantic-pink rounded-xl focus:outline-none focus:border-romantic-dark focus:ring-2 focus:ring-romantic-pink focus:ring-opacity-50 transition-colors bg-gray-50">
+                <p id="error-msg" class="text-red-500 text-sm hidden font-medium animate-pulse">Incorrect passcode, try again ❤️</p>
+                <button onclick="checkPasscode()" 
+                    class="w-full py-3 bg-romantic-dark hover:bg-rose-500 text-white font-bold rounded-xl shadow-md transform active:scale-95 transition-all">
+                    Unlock
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT (Hidden initially) -->
+    <div id="main-content" class="hidden relative z-10 max-w-lg mx-auto bg-white/40 min-h-screen shadow-2xl backdrop-blur-sm pb-20">
+        
+        <!-- Background Hearts Container -->
+        <div class="heart-bg" id="heart-container"></div>
+
+        <!-- HEADER & TIMER SECTION -->
+        <header class="pt-16 pb-10 px-6 text-center relative z-10">
+            <h1 class="text-5xl md:text-6xl font-script text-romantic-dark mb-4 drop-shadow-sm">Happy 2nd Anniversary</h1>
+            <p class="text-lg text-gray-700 font-medium mb-8">Two years down, forever to go.</p>
+            
+            <div class="bg-white/80 p-6 rounded-3xl shadow-lg border border-romantic-pink/30">
+                <p class="text-sm uppercase tracking-widest text-romantic-dark font-bold mb-4">We've been together for</p>
+                <div class="grid grid-cols-3 gap-3 md:gap-4 text-center">
+                    <div class="bg-romantic-light p-3 rounded-2xl">
+                        <span id="years" class="block text-2xl md:text-3xl font-bold text-romantic-dark">0</span>
+                        <span class="text-xs text-gray-600 font-medium">Years</span>
+                    </div>
+                    <div class="bg-romantic-light p-3 rounded-2xl">
+                        <span id="days" class="block text-2xl md:text-3xl font-bold text-romantic-dark">0</span>
+                        <span class="text-xs text-gray-600 font-medium">Days</span>
+                    </div>
+                    <div class="bg-romantic-light p-3 rounded-2xl">
+                        <span id="hours" class="block text-2xl md:text-3xl font-bold text-romantic-dark">0</span>
+                        <span class="text-xs text-gray-600 font-medium">Hours</span>
+                    </div>
+                    <div class="bg-romantic-light p-3 rounded-2xl">
+                        <span id="minutes" class="block text-2xl md:text-3xl font-bold text-romantic-dark">0</span>
+                        <span class="text-xs text-gray-600 font-medium">Mins</span>
+                    </div>
+                    <div class="bg-romantic-light p-3 rounded-2xl">
+                        <span id="seconds" class="block text-2xl md:text-3xl font-bold text-romantic-dark">0</span>
+                        <span class="text-xs text-gray-600 font-medium">Secs</span>
+                    </div>
+                    <div class="bg-romantic-pink/20 p-3 rounded-2xl flex items-center justify-center">
+                        <span class="text-2xl animate-bounce">❤️</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MEMORIES GALLERY -->
+        <section class="px-6 py-8 relative z-10">
+            <h2 class="text-4xl font-script text-center text-romantic-dark mb-8">Our Memories</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <!-- Photo 1 -->
+                <div class="polaroid">
+                    <img src="https://placehold.co/400x400/ffb3c6/ffffff?text=Our+First+Date" alt="Our First Date" class="w-full aspect-square object-cover bg-gray-100 mb-3 rounded-sm">
+                    <p class="font-script text-xl text-center text-gray-800">The day it all started</p>
+                </div>
+                
+                <!-- Photo 2 -->
+                <div class="polaroid">
+                    <img src="https://placehold.co/400x400/ff8fab/ffffff?text=The one day" alt="Favourite day together" class="w-full aspect-square object-cover bg-gray-100 mb-3 rounded-sm">
+                    <p class="font-script text-xl text-center text-gray-800">Best day ever</p>
+                </div>
+                
+                <!-- Photo 3 -->
+                <div class="polaroid">
+                    <img src="https://placehold.co/400x400/fb6f92/ffffff?text=Being+Silly" alt="Silly moment" class="w-full aspect-square object-cover bg-gray-100 mb-3 rounded-sm">
+                    <p class="font-script text-xl text-center text-gray-800">You always make me laugh</p>
+                </div>
+
+                <!-- Photo 4 -->
+                <div class="polaroid">
+                    <img src="https://placehold.co/400x400/ffe5ec/fb6f92?text=Just+Us" alt="Selfie" class="w-full aspect-square object-cover bg-gray-100 mb-3 rounded-sm border border-gray-100">
+                    <p class="font-script text-xl text-center text-gray-800">My favorite person ❤️</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOVE LETTER -->
+        <section class="px-6 py-12 relative z-10">
+            <h2 class="text-4xl font-script text-center text-romantic-dark mb-8">A Note for You</h2>
+            
+            <div class="bg-[url('https://www.transparenttextures.com/patterns/notebook.png')] bg-white p-8 rounded-sm shadow-xl relative border-l-4 border-romantic-pink">
+                <!-- Decorative Pin -->
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-red-400 rounded-full shadow-md border-2 border-red-500 z-20">
+                    <div class="absolute inset-1 bg-white/40 rounded-full"></div>
+                </div>
+
+                <p class="font-script text-2xl leading-relaxed text-gray-800 mb-4 mt-2">
+                    My Dearest,
+                </p>
+                <p class="text-gray-700 leading-loose mb-4 text-justify indent-8">
+                    I can't believe it's already been two incredible years together. Every single day with you feels like a beautiful dream that I never want to wake up from. You are my rock, my best friend, and my greatest adventure. 
+                </p>
+                <p class="text-gray-700 leading-loose mb-6 text-justify indent-8">
+                    Thank you for the endless laughter, the comforting hugs, and for loving me just the way I am. I promise to keep choosing you, every single day, for all the years to come. Here is to us, and to the beautiful future we are building together.
+                </p>
+                <p class="font-script text-2xl text-right text-romantic-dark">
+                    Forever Yours,<br>
+                    [Your Name] ❤️
+                </p>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="text-center pb-8 pt-4 relative z-10">
+            <p class="text-sm text-gray-500 font-medium">Made with love for our 2nd Anniversary</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // Change your passcode here
+        const SECRET_PASSCODE = "1609"; 
+        
+        // Change your anniversary date here (Year, Month (0-11 so Sept is 8), Day, Hour, Min)
+        // Current placeholder is set to exactly 2 years prior to Sept 15, 2026 for the demo.
+        const anniversaryDate = new Date(2024, 8, 16, 0, 0, 0); 
+        // ---------------------
+
+        // Passcode Logic
+        const passcodeInput = document.getElementById('passcode-input');
+        
+        // Allow pressing Enter to submit
+        passcodeInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPasscode();
+            }
+        });
+
+        function checkPasscode() {
+            const input = passcodeInput.value;
+            const errorMsg = document.getElementById('error-msg');
+            const screen = document.getElementById('passcode-screen');
+            const mainContent = document.getElementById('main-content');
+
+            if (input === SECRET_PASSCODE) {
+                // Success
+                errorMsg.classList.add('hidden');
+                screen.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                    mainContent.classList.remove('hidden');
+                    mainContent.classList.add('animate-fade-in');
+                    
+                    // Start animations and timers only after unlock
+                    startTimer();
+                    createHearts();
+                }, 700); // Wait for fade out
+            } else {
+                // Fail
+                errorMsg.classList.remove('hidden');
+                passcodeInput.value = '';
+                passcodeInput.focus();
+                
+                // Shake animation for input
+                passcodeInput.classList.add('transform', 'translate-x-2');
+                setTimeout(() => passcodeInput.classList.replace('translate-x-2', '-translate-x-2'), 100);
+                setTimeout(() => passcodeInput.classList.replace('-translate-x-2', 'translate-x-2'), 200);
+                setTimeout(() => passcodeInput.classList.replace('translate-x-2', 'translate-x-0'), 300);
+            }
+        }
+
+        // Count-up Timer Logic
+        function startTimer() {
+            function updateTimer() {
+                const now = new Date();
+                const difference = now.getTime() - anniversaryDate.getTime();
+
+                // Calculate time units
+                const daysTotal = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const years = Math.floor(daysTotal / 365);
+                const days = daysTotal % 365;
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                // Update DOM elements
+                document.getElementById('years').innerText = years;
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            }
+
+            // Run immediately, then every second
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // Floating Hearts Animation Logic
+        function createHearts() {
+            const heartContainer = document.getElementById('heart-container');
+            const emojis = ['❤️', '💖', '💕', '🌸', '✨']; // Variety of cute emojis
+            
+            // Function to generate a single heart
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Randomly select an emoji
+                heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Randomize position, size, and animation duration
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's'; // 5s to 10s
+                heart.style.fontSize = (Math.random() * 1.5 + 0.5) + 'rem'; // 0.5rem to 2rem
+                
+                heartContainer.appendChild(heart);
+                
+                // Remove heart after it floats up to prevent DOM bloat
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000); 
+            }
+
+            // Create initial batch of hearts
+            for(let i=0; i<15; i++) {
+                setTimeout(createHeart, Math.random() * 3000);
+            }
+
+            // Continuously create hearts
+            setInterval(createHeart, 800);
+        }
+        
+        // Add a simple fade-in keyframe to Tailwind via JS insertion for the main content reveal
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+                animation: fadeIn 1s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
